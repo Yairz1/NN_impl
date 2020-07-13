@@ -16,4 +16,4 @@ def objective_soft_max(X, W, C):
 
 
 def objective_soft_max_gradient(X, W, C):
-    pass
+    x = 1
