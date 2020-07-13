@@ -28,7 +28,12 @@ def objective_soft_max(X, W, C):
 
 
 def objective_soft_max_gradient_X(X, W, C):
-    pass
+    WT_X = W.T @ X
+    m = X.shape[1]
+    return (1 / m) * W @ (divide(exp(WT_X), sum(exp(WT_X), axis=0)) - C)
+
+
+# todo : add another objective_soft_max_gradient_X with naive impl and compare results.
 
 
 def objective_soft_max_gradient_W(X, W, C):

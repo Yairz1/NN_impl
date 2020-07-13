@@ -9,7 +9,6 @@ def f(X, W):
     return X.T @ W
 
 
-
 class LossTests(unittest.TestCase):
 
     def test00_objective_soft_max_sanity_test(self):
@@ -50,3 +49,24 @@ class LossTests(unittest.TestCase):
         c1 = np.round(objective_soft_max_gradient_W(X, W, C), 10)
         c2 = np.round(objective_soft_max_gradient_W2(X, W, C), 10)
         self.assertTrue(array_equal(c1, c2))
+
+    def test04_objective_soft_max_gradient_W_dimension(self):
+        C, W, X = self.create_X_C_W()
+        c1 = np.round(objective_soft_max_gradient_W(X, W, C), 10)
+        self.assertTrue(False)
+
+    def test05_objective_soft_max_gradient_X_sanity_test(self):
+        C, W, X = self.create_X_C_W()
+
+        try:
+            objective_soft_max_gradient_X(X, W, C)
+            self.assertTrue(True)
+        except:
+            self.assertTrue(False)
+
+    def test06_objective_soft_max_gradient_X_dimension(self):
+        C, W, X = self.create_X_C_W()
+        result = objective_soft_max_gradient_X(X, W, C).shape
+        expected_shape = X.shape
+        self.assertEqual(True)
+
