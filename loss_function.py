@@ -1,7 +1,6 @@
 import numpy as np
-from numpy import exp, zeros, diag, log, array, sum, max, divide
-import scipy
-from activation import softmax
+from numpy import diag, log, sum, max, divide
+from numpy.core._multiarray_umath import exp
 
 
 def find_eta(X, W):
@@ -47,12 +46,16 @@ def objective_soft_max_gradient_X(X, W, C):
 
 # todo : add another objective_soft_max_gradient_X with naive impl and compare results.
 
+
 def objective_soft_max_gradient_W(X, W, C):
+    l = C.shape[0]
+    n = X.shape[0]
     m = X.shape[1]
     eta = find_eta(X, W)
     XT_W = X.T @ W - eta
     weighted_sum = sum(exp(XT_W), axis=1)
-    gradient = (1 / m) * X @ (divide(exp(XT_W), weighted_sum.reshape(weighted_sum.shape[0], 1)) - C.T)
-    return gradient.T
-
-
+    wighted_sum_matrix = diag(1 / weighted_sum)
+    grad = np.zeros((l, n))
+    for p in range(l):
+        grad[p, :] = (1 / m) * X @ (wighted_sum_matrix @ exp(XT_W[:, p]) - C[p, :])
+    return grad     #TODO may be need to do transpose on the result

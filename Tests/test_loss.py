@@ -1,9 +1,10 @@
 import unittest
 
-from Tests.Utils import objective_soft_max_gradient_W2, create_C_W_X, create_C_W_X_d, objective_soft_max_new_but_bad, \
-    objective_soft_max_gradient_W3
+from Tests.Utils import create_C_W_X, create_C_W_X_d
+from archive import objective_soft_max_new_but_bad, objective_soft_max_gradient_W2, \
+    objective_soft_max_gradient_W_old_but_gold
 from loss_function import *
-from numpy import array_equal
+from numpy import array_equal, array
 
 
 def f(X, W):
@@ -72,6 +73,6 @@ class LossTests(unittest.TestCase):
 
     def test08_objective_soft_max_gradient_W_dimension_compare_with_naive(self):
         C, W, X = create_C_W_X()
-        c1 = np.round(objective_soft_max_gradient_W(X, W, C), 10)
-        c2 = np.round(objective_soft_max_gradient_W3(X, W, C), 10)
+        c1 = np.round(objective_soft_max_gradient_W_old_but_gold(X, W, C), 10)
+        c2 = np.round(objective_soft_max_gradient_W(X, W, C), 10)
         self.assertTrue(array_equal(c1, c2))
