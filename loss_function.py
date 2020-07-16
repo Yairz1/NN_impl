@@ -47,7 +47,6 @@ def objective_soft_max_gradient_X(X, W, C):
 
 # todo : add another objective_soft_max_gradient_X with naive impl and compare results.
 
-
 def objective_soft_max_gradient_W(X, W, C):
     m = X.shape[1]
     eta = find_eta(X, W)
