@@ -76,9 +76,10 @@ def objective_soft_max_gradient_W3(X, W, C):
     eta = find_eta(X, W)
     XT_W = X.T @ W - eta
     weighted_sum = sum(exp(XT_W), axis=1)
+    wighted_sum_matrix = diag(1 / weighted_sum)
     grad = np.zeros((l, n))
     for p in range(l):
-        grad[p, :] = (1 / m) * X @ (divide(exp(XT_W[:, p]), weighted_sum) - C[p, :])
+        grad[p, :] = (1 / m) * X @ (wighted_sum_matrix @ exp(XT_W[:, p]) - C[p, :])
     return grad
 
 
