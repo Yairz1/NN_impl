@@ -1,34 +1,19 @@
 import unittest
 
-from Tests.Utils import data_factory
-from activation import *
-from numpy import array, ones, hstack, sum, average, round
-from numpy.linalg import norm
-from numpy.random import randn, rand
-from matplotlib.pyplot import plot
+from Tests.Utils import objective_soft_max_new_but_bad, create_C_W_X_d
+from numpy import average, round
 
 from loss_function import objective_soft_max
 
 
 class test_gradient(unittest.TestCase):
 
-    def create_C_W_X_d(self, bias=True):
-        _, C_val, _, X_val = data_factory('swiss', bias)
-        W = randn(X_val.shape[0], C_val.shape[0])
-        d = rand(X_val.shape[0])
-        d[-1] = 0
-        d = d.reshape(X_val.shape[0], 1)
-        d_w = hstack([d] * W.shape[1])
-        d_x = hstack([d] * X_val.shape[1])
-        d_x = randn(*X_val.shape)
-        return C_val, W, X_val, d_w, d_x
-
     def test_linear_convergence_gradient_test_W(self):
         max_iter = 25
         eps0 = 0.5
         losses = []
         loss_convergence = []
-        C, W, X, d, _ = self.create_C_W_X_d()
+        C, W, X, d, _ = create_C_W_X_d()
         for i in range(max_iter):
             eps = eps0 * (0.5 ** i)
             losses.append(abs(objective_soft_max(X, W + eps * d, C) -
@@ -40,15 +25,16 @@ class test_gradient(unittest.TestCase):
         self.assertTrue(0.48 <= avg_val <= 0.52, msg=f'ans = {avg_val}')
 
     def test_linear_convergence_gradient_test_X(self):
-        max_iter = 17
+        max_iter = 30
         eps0 = 0.5
         losses = []
         loss_convergence = []
-        C, W, X, _, d = self.create_C_W_X_d()
+        C, W, X, _, d = create_C_W_X_d()
         for i in range(max_iter):
             eps = eps0 * (0.5 ** i)
-            losses.append(abs(objective_soft_max(X + eps * d, W, C) -
-                              objective_soft_max(X, W, C)))
+            objective1 = round(objective_soft_max(X + eps * d, W, C), 10)
+            objective2 = round(objective_soft_max(X, W, C), 10)
+            losses.append(abs(objective1 - objective2))
 
         for i in range(1, len(losses)):
             loss_convergence.append(losses[i] / losses[i - 1])
