@@ -4,10 +4,10 @@ from numpy.core._multiarray_umath import exp
 
 
 def find_eta(X, W):
-    return max(X.T @ W, axis=0)
+    return max(X.T @ W, axis=1).reshape(X.shape[1], 1)
 
 
-def objective_soft_max_Wj(X, W, C):
+def objective_soft_max(X, W, C):
     """
     :param X:
     :param W: shape #features x #labels
@@ -25,19 +25,6 @@ def objective_soft_max_Wj(X, W, C):
     return - objective_value / m
 
 
-def objective_soft_max(X, W, C):
-    l = C.shape[0]
-    m = X.shape[1]
-    objective_value = 0
-    eta = find_eta(X, W)
-    XT_W = X.T @ W - eta
-    weighted_sum = sum(exp(XT_W), axis=1)
-    wighted_sum_matrix = diag(1 / weighted_sum)
-    for k in range(l):
-        objective_value = objective_value + C[k, :].T @ log(wighted_sum_matrix @ exp(XT_W[:, k]))
-    return - objective_value / m
-
-
 def objective_soft_max_gradient_X(X, W, C):
     WT_X = W.T @ X
     m = X.shape[1]
@@ -45,14 +32,9 @@ def objective_soft_max_gradient_X(X, W, C):
 
 
 def objective_soft_max_gradient_W(X, W, C):
-    l = C.shape[0]
-    n = X.shape[0]
     m = X.shape[1]
     eta = find_eta(X, W)
     XT_W = X.T @ W - eta
     weighted_sum = sum(exp(XT_W), axis=1)
-    wighted_sum_matrix = diag(1 / weighted_sum)
-    grad = np.zeros((n, l))
-    for p in range(l):
-        grad[:, p] = (1 / m) * X @ (wighted_sum_matrix @ exp(XT_W[:, p]) - C[p, :])
-    return grad
+    gradient = (1 / m) * X @ (divide(exp(XT_W), weighted_sum.reshape(weighted_sum.shape[0], 1)) - C.T)
+    return gradient

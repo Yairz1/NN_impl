@@ -42,10 +42,6 @@ def data_factory(data_name, bias=True):
 def create_C_W_X_d(bias=True):
     _, C_val, _, X_val = data_factory('swiss', bias)
     W = randn(X_val.shape[0], C_val.shape[0])
-    d = rand(X_val.shape[0])
-    d[-1] = 0
-    d = d.reshape(X_val.shape[0], 1)
-    d_w = hstack([d] * W.shape[1])
-    # d_x = hstack([d] * X_val.shape[1])
+    d_w = rand(*W.shape)
     d_x = randn(*X_val.shape)
     return C_val, W, X_val, d_w, d_x

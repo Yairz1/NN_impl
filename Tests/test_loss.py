@@ -1,7 +1,7 @@
 import unittest
 
 from Tests.Utils import create_C_W_X, create_C_W_X_d
-from archive import objective_soft_max_new_but_bad, objective_soft_max_gradient_W2, \
+from archive import objective_soft_max_old, objective_soft_max_gradient_W2, \
     objective_soft_max_gradient_W_old_but_gold
 from loss_function import *
 from numpy import array_equal, array
@@ -31,7 +31,7 @@ class LossTests(unittest.TestCase):
     def test02_objective_soft_max_sanity_test(self):
         C, W, X, _, _ = create_C_W_X_d()
         c1 = np.round(objective_soft_max(X, W, C), 10)
-        c2 = np.round(objective_soft_max_new_but_bad(X, W, C), 10)
+        c2 = np.round(objective_soft_max_old(X, W, C), 10)
 
         self.assertEqual(c1, c2)
 
