@@ -52,10 +52,9 @@ class LossTests(unittest.TestCase):
 
     def test05_objective_soft_max_gradient_W_dimension(self):
         C, W, X = create_C_W_X()
-        exptected_shape = array([W.shape[1], X.shape[0]])
+        exptected_shape = array([X.shape[0], W.shape[1]])
         result_shape = objective_soft_max_gradient_W(X, W, C).shape
         self.assertTrue(array_equal(exptected_shape, result_shape))
-
 
     def test06_objective_soft_max_gradient_X_sanity_test(self):
         C, W, X = create_C_W_X()
@@ -76,3 +75,7 @@ class LossTests(unittest.TestCase):
         c1 = np.round(objective_soft_max_gradient_W_old_but_gold(X, W, C), 10)
         c2 = np.round(objective_soft_max_gradient_W(X, W, C), 10)
         self.assertTrue(array_equal(c1, c2))
+
+
+if __name__ == '__main__':
+    unittest.main()

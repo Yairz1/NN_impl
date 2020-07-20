@@ -39,9 +39,9 @@ def objective_soft_max_gradient_W2(X, W, C):
     eta = find_eta(X, W)
     XT_W = X.T @ W - eta
     weighted_sum = sum(exp(XT_W), axis=1)
-    grad = np.zeros((l, n))
+    grad = np.zeros((n, l))
     for p in range(l):
-        grad[p, :] = (1 / m) * X @ (divide(exp(XT_W[:, p]), weighted_sum) - C[p, :])
+        grad[:, p] = (1 / m) * X @ (divide(exp(XT_W[:, p]), weighted_sum) - C[p, :])
     return grad
 
 
@@ -51,4 +51,4 @@ def objective_soft_max_gradient_W_old_but_gold(X, W, C):
     XT_W = X.T @ W - eta
     weighted_sum = sum(exp(XT_W), axis=1)
     gradient = (1 / m) * X @ (divide(exp(XT_W), weighted_sum.reshape(weighted_sum.shape[0], 1)) - C.T)
-    return gradient.T
+    return gradient
