@@ -15,6 +15,7 @@ class SGD:
         batches = self.create_batches()
         W_history = zeros((W.shape[0], len(batches) + 1))
         W_history[:, 0] = W
+        dw = 0  # first step without momentum
         for i, batch in enumerate(batches):
             grad_sum = 0
             for idxs in batch:
@@ -23,7 +24,8 @@ class SGD:
                 grad_sum += grad_F(sample, W.reshape(m, n), labels)
             grad = grad_sum / len(batch)
             # lr = self.armijo_search(X[:, batch], F, grad, -grad, maxIter=30)
-            W_history[:, i + 1] = W_history[:, i] - lr * grad.reshape(-1)
+            dw = momentum * dw - lr * grad.reshape(-1)
+            W_history[:, i + 1] = W_history[:, i] + dw
         return average(W_history, axis=1).reshape(m, n)  # 0 it's columns
 
     def create_batches(self):
