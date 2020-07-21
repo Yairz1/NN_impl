@@ -52,6 +52,7 @@ class test_gradient(unittest.TestCase):
 
         self.assertTrue(True)
 
+    # todo: should be in clear place subsection 3
     def test03_swiss_train(self):
         epochs = 15
         C, W0, X, _, _ = create_C_W_X_d()
