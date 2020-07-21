@@ -32,11 +32,9 @@ def objective_soft_max_gradient_X(X, W, C):
 
 
 def objective_soft_max_gradient_W(X, W, C):
-    m = X.shape[1]
+    m = C.shape[1]
     eta = find_eta(X, W)
     XT_W = X.T @ W - eta
     weighted_sum = sum(exp(XT_W), axis=1)
     gradient = (1 / m) * X @ (divide(exp(XT_W), weighted_sum.reshape(weighted_sum.shape[0], 1)) - C.T)
     return gradient
-
-
