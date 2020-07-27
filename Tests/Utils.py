@@ -24,19 +24,20 @@ def normlize_data(X, X_mean=None, X_std=None):
 
 
 def data_factory(data_name, bias=True):
-    path_dic = {'swiss': '../data/NNdata/SwissRollData.mat'}
+    path_dic = {'swiss': '../data/NNdata/SwissRollData.mat',
+                'PeaksData': '../data/NNdata/PeaksData.mat',
+                'GMMData': '../data/NNdata/GMMData.mat'}
 
-    if data_name == 'swiss':
-        data = loadmat(path_dic['swiss'])
-        Yt, Yv = data['Yt'], data['Yv']
-        if bias:
-            # -------- Train ----------
-            Yt, X_mean, X_std = normlize_data(Yt)
-            Yt = vstack((Yt, ones((1, Yt.shape[1]))))
+    data = loadmat(path_dic[data_name])
+    Yt, Yv = data['Yt'], data['Yv']
+    if bias:
+        # -------- Train ----------
+        Yt, X_mean, X_std = normlize_data(Yt)
+        Yt = vstack((Yt, ones((1, Yt.shape[1]))))
 
-            # -------- Validation ----------
-            Yv, _, _ = normlize_data(Yv, X_mean, X_std)
-            Yv = vstack((Yv, ones((1, Yv.shape[1]))))
+        # -------- Validation ----------
+        Yv, _, _ = normlize_data(Yv, X_mean, X_std)
+        Yv = vstack((Yv, ones((1, Yv.shape[1]))))
 
         return data['Ct'], data['Cv'], Yt, Yv
 
@@ -47,3 +48,4 @@ def create_C_W_X_d(bias=True):
     d_w = rand(*W.shape)
     d_x = randn(*X_val.shape)
     return C_val, W, X_val, d_w, d_x
+

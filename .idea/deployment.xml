@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="yairzo@eransrv1.cs.bgu.ac.il:22">
+    <serverData>
+      <paths name="yairzo@eransrv1.cs.bgu.ac.il:22">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/NN_Impl" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

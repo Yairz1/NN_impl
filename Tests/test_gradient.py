@@ -84,19 +84,6 @@ class test_gradient(unittest.TestCase):
         self.assertTrue(0.2 <= avg_val <= 0.3, msg=f'ans = {avg_val}')
         # todo add  plot
 
-    def test05_quadratic_convergence_gradient_X(self):
-        C, W, X, d, _ = create_C_W_X_d()
-        res1 = average(objective_soft_max_gradient_W(X, W, C), 0)
-        res2 = average(objective_soft_max_gradient_W(X, W, C), 1)
-        res3 = objective_soft_max_gradient_W(X[:, 0].reshape(X.shape[0], 1), W, C[:, 0])
-        for i in range(1, X.shape[1]):
-            sample = X[:, i].reshape(X.shape[0], 1)
-            res3 = res3 + objective_soft_max_gradient_W(sample, W, C[:, i]) / X.shape[1]
-
-        print(f'res1 = {res1}')
-        print(f'res1 = {res2}')
-        print(f'res1 = {res3}')
-
 
 if __name__ == '__main__':
     unittest.main()
