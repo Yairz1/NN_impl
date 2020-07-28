@@ -1,6 +1,6 @@
 import unittest
 
-from Tests.Utils import create_C_W_X, create_C_W_X_d
+from Utils import create_C_W_X, create_C_W_X_d
 from archive import objective_soft_max_old, objective_soft_max_gradient_W2, \
     objective_soft_max_gradient_W_old_but_gold
 from loss_function import *

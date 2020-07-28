@@ -1,8 +1,10 @@
 import numpy as np
+from matplotlib.ticker import ScalarFormatter, FormatStrFormatter
 from numpy import ones, vstack, hstack
 from numpy.core._multiarray_umath import array
 from numpy.random.mtrand import randn, rand
 from scipy.io import loadmat
+import matplotlib.pyplot as plt
 
 
 def create_C_W_X():
@@ -43,9 +45,21 @@ def data_factory(data_name, bias=True):
 
 
 def create_C_W_X_d(bias=True):
-    _, C_val, _, X_val = data_factory('swiss', bias)
+    C_train, C_val, X_train, X_val = data_factory('GMMData')  # options: 'swiss','PeaksData','GMMData'
     W = randn(X_val.shape[0], C_val.shape[0])
     d_w = rand(*W.shape)
     d_x = randn(*X_val.shape)
     return C_val, W, X_val, d_w, d_x
 
+
+def show_and_save_plot(x_train, y_train, x_val, y_val, title):
+    fig, ax = plt.subplots(figsize=(7, 7))
+
+    ax.set_title(title, color='C0')
+    ax.semilogy(x_train, y_train, 'r', label='Train')
+    ax.semilogy(x_val, y_val, 'b', label='Validation')
+    ax.set_xlabel("#Epochs", color='C0')
+    ax.set_ylabel('Accuracy', color='C0')
+
+    ax.legend()
+    plt.savefig(f'../plots/{title}.pdf')

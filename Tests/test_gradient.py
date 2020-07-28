@@ -1,7 +1,7 @@
 import unittest
 
-from Tests.Utils import create_C_W_X_d
-from numpy import average, round, trace, sum
+from Utils import create_C_W_X_d
+from numpy import average, round, trace
 
 from loss_function import objective_soft_max, objective_soft_max_gradient_W, objective_soft_max_gradient_X
 
