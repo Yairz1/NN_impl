@@ -55,6 +55,7 @@ class test_gradient(unittest.TestCase):
         self.assertTrue(True)
 
     # todo: should be in clear place subsection 3
+    #todo: added more options of b_size epochs and lr.
     def test04_swiss_train(self):
         data_name = 'GMMData'
         C_train, C_val, X_train, X_val = data_factory(data_name)  # options: 'swiss','PeaksData','GMMData'

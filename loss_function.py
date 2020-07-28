@@ -7,7 +7,7 @@ def find_eta(X, W):
     return max(X.T @ W, axis=1).reshape(X.shape[1], 1)
 
 
-def objective_soft_max(X, W, C):
+def objective_soft_max(X, W, C, XT_W=None):
     """
     :param X:
     :param W: shape #features x #labels

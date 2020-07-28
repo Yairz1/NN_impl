@@ -26,7 +26,7 @@ def normlize_data(X, X_mean=None, X_std=None):
 
 
 def data_factory(data_name, bias=True):
-    path_dic = {'swiss': '../data/NNdata/SwissRollData.mat',
+    path_dic = {'Swiss': '../data/NNdata/SwissRollData.mat',
                 'PeaksData': '../data/NNdata/PeaksData.mat',
                 'GMMData': '../data/NNdata/GMMData.mat'}
 
