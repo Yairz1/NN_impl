@@ -2,17 +2,18 @@ import activation
 from numpy.random import randn
 
 
-def init_random_params(num_layers, layer_dim):
+def init_random_params(num_layers, layer_dim, output_param_dim):
     params = dict()
-    for layer in range(num_layers):
+    for layer in range(num_layers - 1):
         params[layer] = randn(*layer_dim)
+    params[layer + 1] = randn(*output_param_dim)
     return params
 
 
 class NeuralNetwork:
     def __init__(self, num_of_layers, f, sigma, layer_dim, output_dim):
         self.num_layers = num_of_layers
-        self.params = init_random_params(num_of_layers, layer_dim)
+        self.params = init_random_params(num_of_layers, layer_dim, output_dim)
         self.f = f
         self.sigma = sigma
 

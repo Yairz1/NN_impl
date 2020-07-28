@@ -28,7 +28,7 @@ class test_gradient(unittest.TestCase):
         C, W0, X, _, _ = create_C_W_X_d()
         optimizer = SGD(batch_size=256, m=X.shape[1])
         W = optimizer.optimize(W0, X, C,
-                               None,
+                               objective_soft_max,
                                objective_soft_max_gradient_W)
         self.assertTrue(True)
 
@@ -38,7 +38,7 @@ class test_gradient(unittest.TestCase):
         W = W0.copy()
         for epoch in range(15):
             W = optimizer.optimize(W, X, C,
-                                   None,
+                                   objective_soft_max,
                                    objective_soft_max_gradient_W, lr=1)
 
         self.assertTrue(True)
@@ -49,7 +49,7 @@ class test_gradient(unittest.TestCase):
         W = W0.copy()
         for epoch in range(15):
             W = optimizer.optimize(W, X, C,
-                                   None,
+                                   objective_soft_max,
                                    objective_soft_max_gradient_W, lr=1, momentum=0.001)
 
         self.assertTrue(True)

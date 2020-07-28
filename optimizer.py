@@ -32,7 +32,7 @@ class SGD:
                 labels = C[:, idxs].reshape(C.shape[0], 1)
                 g_sum += grad_F(sample, current_W, labels)
             g = g_sum / len(batch)  # average
-            # lr = self.armijo_search(X[:, batch], F, current_W, C[:, batch], g, -g, maxIter=30)
+            lr = self.armijo_search(X[:, batch], F, current_W, C[:, batch], g, -g, maxIter=30)
             dw = momentum * dw - lr * g.reshape(-1)
             W_history[:, i + 1] = W_history[:, i] + dw
         return average(W_history, axis=1).reshape(m, n)

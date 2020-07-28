@@ -3,22 +3,27 @@ from numpy import diag, log, sum, max, divide
 from numpy.core._multiarray_umath import exp
 
 
-def find_eta(X, W):
-    return max(X.T @ W, axis=1).reshape(X.shape[1], 1)
+def find_eta(X, W, XT_W=None):
+    if XT_W is None:
+        XT_W = X.T @ W
+    return max(XT_W, axis=1).reshape(XT_W.shape[0], 1)
 
 
-def objective_soft_max(X, W, C, XT_W=None):
+def objective_soft_max(X, W, C, WT_X=None):
     """
     :param X:
     :param W: shape #features x #labels
     :param C: shape #labels x #samples
     :return:
     """
-    l = C.shape[0]
-    m = X.shape[1]
+    l, m = C.shape
     objective_value = 0
-    eta = find_eta(X, W)
-    XT_W = X.T @ W - eta
+    if WT_X is None:
+        XT_W = X.T @ W
+    else:
+        XT_W = WT_X.T
+    eta = find_eta(X, W, XT_W)
+    XT_W -= eta
     weighted_sum = sum(exp(XT_W), axis=1)
     for k in range(l):
         objective_value = objective_value + C[k, :].T @ log(divide(exp(XT_W[:, k]), weighted_sum))
