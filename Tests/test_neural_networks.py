@@ -1,7 +1,7 @@
 import unittest
 from NeuralNetwork import NeuralNetwork
 from Utils import data_factory
-from activation import tanh
+from function import tanh
 from numpy.random import randn
 
 from loss_function import objective_soft_max
@@ -14,7 +14,7 @@ class test_neural_networks(unittest.TestCase):
         n = X_train.shape[0]
         l = C_train.shape[0]
         f = lambda X, W: W.T @ X  # W.columns = X.rows, W.rows = X.rows
-        net = NeuralNetwork(10, f=f, sigma=tanh, layer_dim=(n, n), output_dim=(n, l))
-        prediction = net.forward(X_val)
-        objective_value = objective_soft_max(X=None, W=None, C=C_val, WT_X=prediction)
-        print(objective_value)
+        model = NeuralNetwork(10, f=f, sigma=tanh, layer_dim=(n, n), output_dim=(n, l))
+        output = model(X_val)
+        objective_value = objective_soft_max(X=None, W=None, C=C_val, WT_X=output)
+        self.assertTrue(True)
