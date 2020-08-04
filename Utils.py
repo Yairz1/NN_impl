@@ -1,10 +1,13 @@
 import numpy as np
-from matplotlib.ticker import ScalarFormatter, FormatStrFormatter
 from numpy import ones, vstack, hstack
 from numpy.core._multiarray_umath import array
 from numpy.random.mtrand import randn, rand
 from scipy.io import loadmat
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+#from matplotlib.ticker import ScalarFormatter, FormatStrFormatter
+
+
 
 
 def create_C_W_X():
@@ -60,6 +63,7 @@ def show_and_save_plot(x_train, y_train, x_val, y_val, title):
     ax.semilogy(x_val, y_val, 'b', label='Validation')
     ax.set_xlabel("#Epochs", color='C0')
     ax.set_ylabel('Accuracy', color='C0')
+    ax.yaxis.set_minor_formatter(ticker.ScalarFormatter())
 
     ax.legend()
     plt.savefig(f'../plots/{title}.pdf')

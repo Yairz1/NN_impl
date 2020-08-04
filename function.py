@@ -28,7 +28,7 @@ def tanh_grad(x):
 
 
 def f_grad_X_mul_V(X, W, V, activation_grad):
-    return W[:, :-1] @ (activation_grad(W.T @ X).T * V)
+    return W[:-1, :] @ (activation_grad(W.T @ X) * V)
 
 
 def f_grad_W_mul_V(X, W, V, activation_grad):
