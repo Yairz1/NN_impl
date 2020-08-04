@@ -24,11 +24,11 @@ def ReLU_grad(x):
 
 
 def tanh_grad(x):
-    return cosh(x) ** -2
+    return 1 - np.power(tanh(x), 2)
 
 
 def f_grad_X_mul_V(X, W, V, activation_grad):
-    return W[:-1, :] @ activation_grad(W.T @ X) @ V
+    return W[:, :-1] @ (activation_grad(W.T @ X).T * V)
 
 
 def f_grad_W_mul_V(X, W, V, activation_grad):
@@ -36,19 +36,13 @@ def f_grad_W_mul_V(X, W, V, activation_grad):
 
 
 class Function:
-    def __init__(self, f, gradient_x, gradient_w):
+    def __init__(self, f, f_grad_X_mul_V, f_grad_W_mul_V):
         self.f = f
-        self.gradient_x = gradient_x
-        self.gradient_w = gradient_w
+        self.f_grad_X_mul_V = f_grad_X_mul_V
+        self.f_grad_W_mul_V = f_grad_W_mul_V
 
     def apply(self, X, W):
         return self.f(X, W)
-
-    def gradient_x(self, X, W):
-        return self.gradient_x(X, W)
-
-    def gradient_w(self, X, W):
-        return self.gradient_w(X, W)
 
     def __call__(self, X, W):
         return self.apply(X, W)

@@ -21,16 +21,26 @@ class test_function(unittest.TestCase):
         self.assertEqual(ReLU_F(x, W).shape, x.shape)
 
     def test03_ReLU_grad(self):
-        pass
+        x = identity(5)
+        self.assertEqual(ReLU_grad(x).shape, x.shape)
 
     def test04_tanh_grad(self):
-        pass
+        x = identity(5)
+        self.assertEqual(tanh_grad(x).shape, x.shape)
 
     def test05_f_grad_X_mul_V(self):
-        pass
+        x = identity(5)
+        w = randn(5, 5)
+        v = randn(5, 5)
+
+        self.assertEqual(f_grad_X_mul_V(x, w, v, activation_grad=ReLU_grad).shape, (x.shape[0]-1, v.shape[1]))
+        self.assertEqual(f_grad_X_mul_V(x, w, v, activation_grad=tanh_grad).shape, (x.shape[0]-1, v.shape[1]))
 
     def test06_f_grad_W_mul_V(self):
-        pass
+        x = identity(5)
+        w = randn(5, 5)
+        v = randn(5, 5)
+        self.assertEqual(f_grad_W_mul_V(x, w, v, activation_grad=tanh_grad).shape, (x.shape[0], v.shape[1]))
 
 
 if __name__ == '__main__':

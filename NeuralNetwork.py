@@ -27,16 +27,15 @@ class NeuralNetwork:
             x = self.f(x, W)
         return x
 
+    def backward(self, loss_gradient_x, loss_gradient_w):  # dx,dw
+        assert bool(self.layers_inputs), "You must run forward before backward"
+        self.gradient[self.num_layers - 1] = loss_gradient_w
+        v = loss_gradient_x
+        for layer in reversed(range(self.num_layers - 1)):
+            self.gradient[layer] = self.f.f_grad_W_mul_V(self.layers_inputs[layer], self.params[layer], v, self.sigma)
+            v = self.f.f_grad_X_mul_V(self.layers_inputs[layer], self.params[layer], v, self.sigma)
 
-    def backward(self, x):  # dx,dw
-        # self.gradient[self.num_layers - 1] = identity(*self.output_dim)
-        # self.gradient[self.num_layers - 2] = grad_w(self.layers_inputs[...],self.params[...])
-        # v = grad_x(self.layers_inputs[...],self.params[...])
-        # for layer, W in reversed(range(self.num_layers - 2)):
-        #     self.gradient[layer] =  grad_w(self.layers_inputs[...],self.params[...]) * v
-        #     v = grad_x(self.layers_inputs[layer-1], self.params[layer-1]) * v
-
-        return x
+        return self.gradient  # self.params_to_vector()
 
     def params_to_vector(self):
         pass  # todo reshape
