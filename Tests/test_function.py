@@ -33,8 +33,8 @@ class test_function(unittest.TestCase):
         w = randn(5, 5)
         v = randn(5, 5)
 
-        self.assertEqual(f_grad_X_mul_V(x, w, v, activation_grad=ReLU_grad).shape, (x.shape[0]-1, v.shape[1]))
-        self.assertEqual(f_grad_X_mul_V(x, w, v, activation_grad=tanh_grad).shape, (x.shape[0]-1, v.shape[1]))
+        self.assertEqual(f_grad_X_mul_V(x, w, v, activation_grad=ReLU_grad).shape, (x.shape[0], v.shape[1]))
+        self.assertEqual(f_grad_X_mul_V(x, w, v, activation_grad=tanh_grad).shape, (x.shape[0], v.shape[1]))
 
     def test06_f_grad_W_mul_V(self):
         x = identity(5)

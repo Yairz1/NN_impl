@@ -7,6 +7,7 @@ from loss_function import objective_soft_max, objective_soft_max_gradient_W, obj
 
 
 class test_gradient(unittest.TestCase):
+    # ________________ loss tests __________________
     def test00_linear_convergence_gradient_test_W(self):
         max_iter = 25
         eps0 = 0.5
@@ -83,6 +84,8 @@ class test_gradient(unittest.TestCase):
         avg_val = average(round(loss_convergence[-5:], 4))
         self.assertTrue(0.2 <= avg_val <= 0.3, msg=f'ans = {avg_val}')
         # todo add  plot
+
+    # ________________ Specific layer tests __________________
 
 
 if __name__ == '__main__':

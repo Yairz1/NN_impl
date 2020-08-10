@@ -1,5 +1,5 @@
 import numpy as np
-from numpy import exp, sum, ndarray, sinh, cosh, diag, kron, identity, exp
+from numpy import exp, sum, ndarray, sinh, cosh, diag, kron, identity, exp, vstack, zeros
 
 
 def ReLU(x: ndarray):
@@ -28,7 +28,8 @@ def tanh_grad(x):
 
 
 def f_grad_X_mul_V(X, W, V, activation_grad):
-    return W[:-1, :] @ (activation_grad(W.T @ X) * V)
+    res = W[:-1, :] @ (activation_grad(W.T @ X) * V)  # avoid the bias row
+    return vstack([res, zeros(res.shape[1])])
 
 
 def f_grad_W_mul_V(X, W, V, activation_grad):

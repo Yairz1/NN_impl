@@ -1,6 +1,6 @@
 import function
 from numpy.random import randn
-from numpy import zeros, identity
+from numpy import zeros, identity, vstack, array, ones
 
 
 def init_random_params(num_layers, layer_dim, output_param_dim):
@@ -25,6 +25,8 @@ class NeuralNetwork:
         for layer, W in self.params.items():
             self.save(layer, x)
             x = self.f(x, W)
+            x[-1:, :] = ones(x.shape[1])  # for bias
+            # todo last iteration shouldnt use activation function because of the gradients
         return x
 
     def backward(self, loss_gradient_x, loss_gradient_w):  # dx,dw
@@ -38,13 +40,16 @@ class NeuralNetwork:
         return self.gradient  # self.params_to_vector()
 
     def params_to_vector(self):
-        pass  # todo reshape
+        vectorized_grad = array([]).reshape(-1, 1)
+        for layer, w in self.params.items():
+            vectorized_grad = vstack([vectorized_grad, w.reshape(-1, 1)])
+        return vectorized_grad.reshape(-1)
 
     def save(self, layer, x):
         self.layers_inputs[layer] = x
 
     def gradient_reset(self):
-        self.gradient = zeros()
+        pass  # self.gradient = zeros()
 
     def __call__(self, x):
         return self.forward(x)

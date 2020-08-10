@@ -32,5 +32,5 @@ class test_neural_networks(unittest.TestCase):
         X = model.layers_inputs[layer_num - 1]
         gradients = model.backward(loss_gradient_x=objective_soft_max_gradient_X(X, W, C=C_val),
                                    loss_gradient_w=objective_soft_max_gradient_W(X, W, C=C_val))
-        print(gradients)
+        vec_grad = model.params_to_vector()
         self.assertTrue(True)
