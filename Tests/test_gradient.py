@@ -171,7 +171,7 @@ class test_gradient(unittest.TestCase):
             objective3 = layer_function.jacMV_W(X, W, b, (eps * d).reshape(-1, 1),
                                                 tanh_grad)  # (X, W, b, V, activation_grad)
 
-            losses.append(abs(objective1 - objective2 - objective3))
+            losses.append(norm(objective1 - objective2 - objective3))
 
         for j in range(1, len(losses)):
             loss_convergence.append(losses[j] / losses[j - 1])
@@ -186,7 +186,6 @@ class test_gradient(unittest.TestCase):
         losses = []
         loss_convergence = []
         C, _, X, _, _ = create_C_W_X_d()
-        X = X[:, :700]
         W = randn(X.shape[0], X.shape[0])
         b = randn(X.shape[0]).reshape(-1, 1)
         d = randn(*X.shape)
@@ -198,7 +197,7 @@ class test_gradient(unittest.TestCase):
             V = (eps * d).T.reshape(-1, 1)
             objective3 = layer_function.jacMV_X(X, W, b, V, tanh_grad)  # (X, W, b, V, activation_grad)
 
-            losses.append(abs(objective1 - objective2 - objective3))
+            losses.append(norm(objective1 - objective2 - objective3))
 
         for j in range(1, len(losses)):
             loss_convergence.append(losses[j] / losses[j - 1])
@@ -224,7 +223,7 @@ class test_gradient(unittest.TestCase):
             V = (eps * repmat(d, 1, X.shape[1])).T.reshape(-1, 1)
             objective3 = layer_function.jacMV_b(X, W, b, V, tanh_grad)  # (X, W, b, V, activation_grad)
 
-            losses.append(abs(objective1 - objective2 - objective3))
+            losses.append(norm(objective1 - objective2 - objective3))
 
         for j in range(1, len(losses)):
             loss_convergence.append(losses[j] / losses[j - 1])
