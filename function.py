@@ -31,6 +31,10 @@ def ReLU_F(X, W, b):
     return ReLU(W.T @ X + b)
 
 
+def tanh_F(X, W, b):
+    assert b.shape == (W.T.shape[0], 1), "should reshape bias to be (n,1)"
+    return tanh(W.T @ X + b)
+
 def ReLU_grad(x):
     x_copy = x.copy()
     x_copy[x_copy <= 0] = 0
