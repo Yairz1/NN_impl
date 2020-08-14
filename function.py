@@ -50,14 +50,14 @@ def tanh_grad(x):
 # ----------------------------------------------------
 
 def jacMV_X(X, W, b, V, activation_grad):
-    return (activation_grad(W.T @ X + b) * (W.T @ V.reshape(W.shape[0], -1).T)).T.reshape(-1, 1)
+    return (activation_grad(W.T @ X + b) * (W.T @ V.reshape(X.shape[1], -1).T)).T.reshape(-1, 1)
 
 
 # v
 
 def jacTMV_X(X, W, b, V, activation_grad):
     # return (W @ (activation_grad(W.T @ X + b) * repmat(V, 1, X.shape[1]))).T.reshape(-1)
-    return (W @ (activation_grad(W.T @ X + b) * V.reshape(W.shape[0], -1))).T.reshape(-1, 1)
+    return (W @ (activation_grad(W.T @ X + b) * V.reshape(X.shape[1], -1).T)).T.reshape(-1, 1)
 
 
 # v
