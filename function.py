@@ -13,11 +13,11 @@ class Function:
         self.jacTMV_W = jacTMV_W
         self.jacTMV_b = jacTMV_b
 
-    def apply(self, X, W, b):
-        return self.f(X, W, b)
+    def apply(self, X, W, b, with_activation=True):
+        return self.f(X, W, b, with_activation)
 
-    def __call__(self, X, W, b):
-        return self.apply(X, W, b)
+    def __call__(self, X, W, b, with_activation=True):
+        return self.apply(X, W, b, with_activation)
 
 
 def ReLU(x: ndarray):
@@ -26,14 +26,18 @@ def ReLU(x: ndarray):
     return x_copy
 
 
-def ReLU_F(X, W, b):
+def ReLU_F(X, W, b, with_relu):
     assert b.shape == (W.T.shape[0], 1), "should reshape bias to be (n,1)"
-    return ReLU(W.T @ X + b)
+    if with_relu:
+        return ReLU(W.T @ X + b)
+    return W.T @ X
 
 
-def tanh_F(X, W, b):
+def tanh_F(X, W, b, with_tan):
     assert b.shape == (W.T.shape[0], 1), "should reshape bias to be (n,1)"
-    return tanh(W.T @ X + b)
+    if with_tan:
+        return tanh(W.T @ X + b)
+    return W.T @ X
 
 
 def ReLU_grad(x):
@@ -56,7 +60,6 @@ def jacMV_X(X, W, b, V, activation_grad):
 # v
 
 def jacTMV_X(X, W, b, V, activation_grad):
-    # return (W @ (activation_grad(W.T @ X + b) * repmat(V, 1, X.shape[1]))).T.reshape(-1)
     return (W @ (activation_grad(W.T @ X + b) * V.reshape(X.shape[1], -1).T)).T.reshape(-1, 1)
 
 

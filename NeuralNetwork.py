@@ -24,16 +24,21 @@ class NeuralNetwork:
         self.num_layers = num_of_layers
         self.output_dim = output_dim
         self.params = init_random_params(num_of_layers, layer_dim,
-                                         output_dim)  # a dict of the form [#layer:(W,b,bias:bool)]
+                                         output_dim)  # a dict of the form [#layer:(W,b)]
         self.layers_inputs = dict()
         self.f = f
         self.activation_grad = activation_grad
         self.gradient = dict()  # a dict of the form [#layer:grad_w,grad_b]
+        self.layer_dim = layer_dim
+        self.output_dim = output_dim
 
     def forward(self, x):
         for layer, (W, b) in self.params.items():
             self.save(layer, x)
-            x = self.f(x, W, b)
+            if layer == self.num_layers - 1:
+                x = self.f(x, W, b, False)
+            else:
+                x = self.f(x, W, b, True)
         return x
 
     def backward(self, loss_gradient_x, loss_gradient_w):  # dx,dw
@@ -59,16 +64,33 @@ class NeuralNetwork:
                                 v,
                                 self.activation_grad)
 
-        return self.gradient
+        return self.params_to_vector(self.gradient)
 
-    def params_to_vector(self):
+    def params_to_vector(self, params):
         vectorized_grad = array([]).reshape(-1, 1)
-        for layer, (W, b, isBiased) in self.params.items():
-            if isBiased:
-                pass
-            # todo: complete
-            vectorized_grad = vstack([vectorized_grad, W.reshape(-1, 1)])
-        return vectorized_grad.reshape(-1)
+        for layer in range(self.num_layers - 1):  # layer:(W,b)
+            W, b = params[layer]
+            vectorized_grad = vstack([vectorized_grad, W.T.reshape(-1, 1), b.reshape(-1, 1)])
+        last_w, _ = params[layer + 1]
+        return vstack([vectorized_grad, last_w.T.reshape(-1, 1)])
+
+    def vector_to_params(self, W):
+        params = dict()
+        n, m = self.layer_dim
+        W_i_start_idx = 0
+        for layer in range(self.num_layers - 1):  # layer:(W,b)
+            W_i_end_idx = W_i_start_idx + n * m
+            b_i_start_idx = W_i_end_idx
+            b_i_end_idx = b_i_start_idx + m  # b length = m
+            params[layer] = (W[W_i_start_idx:W_i_end_idx].reshape(m, n).T,
+                             W[b_i_start_idx:b_i_end_idx].reshape(-1, 1))
+            W_i_start_idx = b_i_end_idx
+        params[layer + 1] = W[-m * n:].reshape(m, n).T, zeros((self.output_dim[1], 1))
+
+        return params
+
+    def set_params(self, W):
+        self.params = self.vector_to_params(W)
 
     def save(self, layer, x):
         self.layers_inputs[layer] = x
