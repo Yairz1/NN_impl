@@ -38,11 +38,9 @@ def data_factory(data_name, bias=True):
     if bias:
         # -------- Train ----------
         Yt, X_mean, X_std = normlize_data(Yt)
-        Yt = vstack((Yt, ones((1, Yt.shape[1]))))
 
         # -------- Validation ----------
         Yv, _, _ = normlize_data(Yv, X_mean, X_std)
-        Yv = vstack((Yv, ones((1, Yv.shape[1]))))
 
         return data['Ct'], data['Cv'], Yt, Yv
 
