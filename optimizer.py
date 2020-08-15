@@ -21,24 +21,24 @@ class SGD:
         return set_of_batches
 
     # def optimize_origin(self, W0, X, C, F, grad_F, lr=0.1, momentum=0):
-        # m, n = W0.shape
-        # batches = self.create_batches()
-        # W_history = zeros((m * n, len(batches) + 1))
-        # W_history[:, 0] = W0.copy().reshape(-1)
-        #
-        # dw = 0  # first step without momentum
-        # for i, batch in enumerate(batches):
-        #     current_W = W_history[:, i].reshape(m, n)
-        #     g_sum = zeros((m, n))  # its a vector not scalar.
-        #     for idxs in batch:
-        #         sample = X[:, idxs].reshape(X.shape[0], 1)
-        #         labels = C[:, idxs].reshape(C.shape[0], 1)
-        #         g_sum += grad_F(sample, current_W, labels)
-        #     g = g_sum / len(batch)  # average
-        #     lr = self.armijo_search(X[:, batch], F, current_W, C[:, batch], g, -g, maxIter=30)
-        #     dw = momentum * dw - lr * g.reshape(-1)
-        #     W_history[:, i + 1] = W_history[:, i] + dw
-        # return average(W_history, axis=1).reshape(m, n)
+    # m, n = W0.shape
+    # batches = self.create_batches()
+    # W_history = zeros((m * n, len(batches) + 1))
+    # W_history[:, 0] = W0.copy().reshape(-1)
+    #
+    # dw = 0  # first step without momentum
+    # for i, batch in enumerate(batches):
+    #     current_W = W_history[:, i].reshape(m, n)
+    #     g_sum = zeros((m, n))  # its a vector not scalar.
+    #     for idxs in batch:
+    #         sample = X[:, idxs].reshape(X.shape[0], 1)
+    #         labels = C[:, idxs].reshape(C.shape[0], 1)
+    #         g_sum += grad_F(sample, current_W, labels)
+    #     g = g_sum / len(batch)  # average
+    #     lr = self.armijo_search(X[:, batch], F, current_W, C[:, batch], g, -g, maxIter=30)
+    #     dw = momentum * dw - lr * g.reshape(-1)
+    #     W_history[:, i + 1] = W_history[:, i] + dw
+    # return average(W_history, axis=1).reshape(m, n)
 
     def optimize(self, W0, X, C, F, grad_F, lr=0.1, momentum=0, isNeural=False):
         m, n = W0.shape
@@ -63,8 +63,8 @@ class SGD:
                 W = F.params_to_vector(F.params).copy()
                 lr = self.armijo_search(x=X[:, batch], f=F, W=W, C=C[:, batch], grad_f=g, d=-g, maxIter=100,
                                         isNeural=isNeural)
-            dw = momentum * dw - lr * g.reshape(-1)
-            W_history[:, i + 1] = W_history[:, i] + dw
+            dw = momentum * dw + lr * g.reshape(-1)
+            W_history[:, i + 1] = W_history[:, i] - dw
         return average(W_history, axis=1).reshape(m, n)
 
     def armijo_search(self, x, f, W, C, grad_f, d, maxIter, isNeural):

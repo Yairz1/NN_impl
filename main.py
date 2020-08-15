@@ -4,7 +4,7 @@ from function import *
 from train import train
 
 
-def train_network(data_name, batch_size, epochs, lr, momentum, L, width):
+def train_network(data_name, batch_size, epochs, lr, momentum, L, width, patient):
     path_dic = {'Swiss': './data/NNdata/SwissRollData.mat',
                 'PeaksData': './data/NNdata/PeaksData.mat',
                 'GMMData': './data/NNdata/GMMData.mat'}
@@ -38,7 +38,7 @@ def train_network(data_name, batch_size, epochs, lr, momentum, L, width):
                                                        batch_size,
                                                        epochs,
                                                        lr,
-                                                       momentum=momentum)
+                                                       momentum=momentum, patient=patient)
     show_and_save_plot(range(len(train_acc)), train_acc, range(len(val_acc)), val_acc,
                        title=f'DataSet:{data_name}| #layer = {L} | batch:{batch_size} epochs:{epochs} lr:{lr} ',
                        semilog=False)
@@ -46,10 +46,11 @@ def train_network(data_name, batch_size, epochs, lr, momentum, L, width):
     print(f'val_acc {val_acc}')
 
 
-batch_size = 50
-epochs = 35
-lr = 0.1
-momentum = 0
-L = 3
+batch_size = 60
+epochs = 20
+lr = 0.01
+momentum = 0.01
+L = 5
 width = 20
-train_network('PeaksData', batch_size, epochs, lr, momentum, L, width)
+patient = 10
+train_network('PeaksData', batch_size, epochs, lr, momentum, L, width, patient)#Swiss
