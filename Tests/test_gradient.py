@@ -306,7 +306,7 @@ class test_gradient(unittest.TestCase):
         eps0 = 0.5
         losses = []
         loss_convergence = []
-        C_train, C_val, X_train, X_val = data_factory('Swiss')  # options: 'Swiss','PeaksData','GMMData'
+        C_train, C_val, X_train, X_val = data_factory('GMMData')  # options: 'Swiss','PeaksData','GMMData'
         n = X_train.shape[0]
         l = C_train.shape[0]
         layer_function = Function(tanh_F, jacMV_X, jacMV_W, jacMV_b, jacTMV_X, jacTMV_W, jacTMV_b)
@@ -321,7 +321,7 @@ class test_gradient(unittest.TestCase):
         d_dw = model.backward(objective_soft_max_gradient_X(X=None, W=model.params[L - 1][0], C=C_val, WT_X=output2),
                               objective_soft_max_gradient_W(X=model.layers_inputs[L - 1], W=None, C=C_val,
                                                             WT_X=output2))
-        #d_dw = d_dw / norm(d_dw)
+        # d_dw = d_dw / norm(d_dw)
         for i in range(max_iter):
             eps = eps0 * (0.5 ** i)
             new_params = params + eps * d

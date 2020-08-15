@@ -1,5 +1,5 @@
 import numpy as np
-from numpy import ndarray, kron, identity, vstack, zeros, diag, block, tanh
+from numpy import ndarray, kron, identity, vstack, zeros, diag, block, tanh, maximum
 from numpy.matlib import repmat
 
 
@@ -21,9 +21,7 @@ class Function:
 
 
 def ReLU(x: ndarray):
-    x_copy = x.copy()
-    x_copy[x_copy < 0] = 0
-    return x_copy
+    return maximum(x.copy(), 0)
 
 
 def ReLU_F(X, W, b, with_relu):
