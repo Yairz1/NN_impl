@@ -54,22 +54,43 @@ def create_C_W_X_d(bias=True):
     return C_val, W, X_val, d_w, d_x
 
 
-def show_and_save_plot(x_train, y_train, x_val, y_val, title, semilog=True):
+def show_and_save_plot(x_train, y_train, x_val, y_val, title, semilog=True, label1='Train', label2='Validation',
+                       two=True,save_option=True, y_axis=False):
     fig, ax = plt.subplots(figsize=(7, 7))
 
     ax.set_title(title, color='C0')
     ax.set_xlabel("#Epochs", color='C0')
     ax.set_ylabel('Accuracy', color='C0')
     if semilog:
-        ax.semilogy(x_train, y_train, 'r', label='Train')
-        ax.semilogy(x_val, y_val, 'b', label='Validation')
+        ax.semilogy(x_train, y_train, 'r', label=label1)
+        if two:
+            ax.semilogy(x_val, y_val, 'b', label=label2)
         # ax.yaxis.set_minor_formatter(ticker.ScalarFormatter())
         ax.legend()
         plt.savefig(f'../plots/{title}.pdf')
 
     else:
-        plt.plot(x_train, y_train, 'r', label='Train')
-        plt.plot(x_val, y_val, 'b', label='Validation')
+        plt.plot(x_train, y_train, 'r', label=label1)
+        if two:
+            plt.plot(x_val, y_val, 'b', label= label2)
         # ax.yaxis.set_minor_formatter(ticker.ScalarFormatter())
         ax.legend()
+        if save_option:
+            plt.savefig(f'./plots/{title}.pdf')
+        else:
+            plt.savefig(f'../plots/{title}.pdf')
+
+        if y_axis:
+            axes = plt.gca()
+            axes.set_ylim([0, 1])
+
+def show_and_save_plot2(x_train, y_train, title):
+
+        plt.title(title, color='C0')
+        plt.figure()
+        plt.plot(x_train, y_train)
+        #plt.legend()
+        plt.ylabel("Decrease Factor")
+        plt.xlabel("Iteration")
+
         plt.savefig(f'../plots/{title}.pdf')
