@@ -1,6 +1,8 @@
 import function
 from numpy.random import randn
 from numpy import zeros, identity, vstack, array, ones
+from numpy.linalg import norm
+
 
 
 def init_random_params(num_layers, layer_dim, output_param_dim):
@@ -47,7 +49,7 @@ class NeuralNetwork:
         v = loss_gradient_x.T.reshape(-1, 1)
         for layer in reversed(range(self.num_layers - 1)):
             W, b = self.params[layer]
-            self.gradient[layer] = (self.f.jacTMV_W(self.layers_inputs[layer],
+            grad_W, grad_b = (self.f.jacTMV_W(self.layers_inputs[layer],
                                                     W,
                                                     b,
                                                     v,
@@ -57,7 +59,7 @@ class NeuralNetwork:
                                                     b,
                                                     v,
                                                     self.activation_grad))
-
+            self.gradient[layer] = grad_W/norm(grad_W), grad_b/norm(grad_b)
             v = self.f.jacTMV_X(self.layers_inputs[layer],
                                 W,
                                 b,
@@ -71,7 +73,7 @@ class NeuralNetwork:
         for layer in range(self.num_layers - 1):  # layer:(W,b)
             W, b = params[layer]
             vectorized_grad = vstack([vectorized_grad, W.T.reshape(-1, 1), b.reshape(-1, 1)])
-        last_w, _ = params[layer + 1]
+        last_w, _ = params[self.num_layers-1]
         return vstack([vectorized_grad, last_w.T.reshape(-1, 1)])
 
     def vector_to_params(self, W):

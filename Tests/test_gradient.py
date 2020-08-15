@@ -282,7 +282,7 @@ class test_gradient(unittest.TestCase):
         l = C_train.shape[0]
         layer_function = Function(tanh_F, jacMV_X, jacMV_W, jacMV_b, jacTMV_X, jacTMV_W, jacTMV_b)
         L = 50
-        model = NeuralNetwork(num_of_layers=L, f=layer_function, activation_grad=ReLU, layer_dim=(n, n),
+        model = NeuralNetwork(num_of_layers=L, f=layer_function, activation_grad=tanh_grad, layer_dim=(n, n),
                               output_dim=(n, l))
         params = model.params_to_vector(model.params).copy()
         d = randn(*params.shape)
@@ -302,7 +302,7 @@ class test_gradient(unittest.TestCase):
         # todo add plot
 
     def test14_full_network_linear_gradient_test_W(self):
-        max_iter = 17
+        max_iter = 15
         eps0 = 0.5
         losses = []
         loss_convergence = []
@@ -311,23 +311,26 @@ class test_gradient(unittest.TestCase):
         l = C_train.shape[0]
         layer_function = Function(tanh_F, jacMV_X, jacMV_W, jacMV_b, jacTMV_X, jacTMV_W, jacTMV_b)
         L = 2
-        model = NeuralNetwork(num_of_layers=L, f=layer_function, activation_grad=ReLU, layer_dim=(n, n),
+        model = NeuralNetwork(num_of_layers=L, f=layer_function, activation_grad=tanh_grad, layer_dim=(n, n),
                               output_dim=(n, l))
         params = model.params_to_vector(model.params).copy()
         d = randn(params.shape[0] * params.shape[1], 1)
-        objective2 = objective_soft_max(X=None, W=None, C=C_val, WT_X=model(X_val))
-
+        d = d / norm(d)
+        output2 = model(X_val)
+        objective2 = objective_soft_max(X=None, W=None, C=C_val, WT_X=output2)
+        d_dw = model.backward(objective_soft_max_gradient_X(X=None, W=model.params[L - 1][0], C=C_val, WT_X=output2),
+                              objective_soft_max_gradient_W(X=model.layers_inputs[L - 1], W=None, C=C_val,
+                                                            WT_X=output2))
+        #d_dw = d_dw / norm(d_dw)
         for i in range(max_iter):
             eps = eps0 * (0.5 ** i)
-            model.set_params(params + eps * d)
-            output2 = model(X_val)
-            objective1 = objective_soft_max(X=X_val, W=None, C=C_val, WT_X=output2)
-            d_dw = model.backward(objective_soft_max_gradient_X(X=X_val, W=model.params[L-1][0], C=C_val, WT_X=output2),
-                                  objective_soft_max_gradient_W(X=X_val, W=model.params[L-1][0], C=C_val, WT_X=output2))
-
+            new_params = params + eps * d
+            model.set_params(new_params)
+            output1 = model(X_val)
+            objective1 = objective_soft_max(X=None, W=None, C=C_val, WT_X=output1)
             objective3 = eps * (d.T @ d_dw)
 
-            losses.append(abs(objective1 - objective2 - objective3))
+            losses.append(abs(objective1 - objective2 - objective3.item(0)))
 
         for j in range(1, len(losses)):
             loss_convergence.append(losses[j] / losses[j - 1])
