@@ -5,6 +5,7 @@ from numpy.random import randn
 from Utils import data_factory
 from loss_function import objective_soft_max, objective_soft_max_gradient_W
 from optimizer import SGD
+from scipy.special import softmax
 
 
 def accuracy(X, W, C, XT_W=None):
@@ -12,11 +13,11 @@ def accuracy(X, W, C, XT_W=None):
         XT_W = X.T @ W
         res = argmax(XT_W, axis=1)
     else:
-        res = argmax(XT_W, axis=0)
+        res = argmax(softmax(XT_W, axis=1), axis=0)
 
     expected = argmax(C, axis=0)
     diff = res - expected
-    return int(round(100 * len(diff[diff == 0]) / len(diff), 4))
+    return round(100 * len(diff[diff == 0]) / len(diff), 2)
 
 
 def train(model, model_grad, isNeural, C_train, C_val, X_train, X_val, W0, batch_size, epochs, lr, momentum=0,

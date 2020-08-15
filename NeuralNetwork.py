@@ -17,7 +17,7 @@ def init_random_params(num_layers, first_layer_dim, layer_dim, output_param_dim)
     n, m = layer_dim
     for layer in range(1, num_layers - 1):
         params[layer] = randn(n, m), randn(m, 1)
-    params[layer + 1] = randn(*output_param_dim), zeros((output_param_dim[1], 1))
+    params[num_layers-1] = randn(*output_param_dim), zeros((output_param_dim[1], 1))
     return params
 
 
@@ -90,7 +90,7 @@ class NeuralNetwork:
             params[layer] = (W[W_i_start_idx:W_i_end_idx].reshape(m, n).T,
                              W[b_i_start_idx:b_i_end_idx].reshape(-1, 1))
             W_i_start_idx = b_i_end_idx
-        params[layer + 1] = W[W_i_start_idx:].reshape(self.output_dim[1], self.output_dim[0]).T, \
+        params[self.num_layers - 1] = W[W_i_start_idx:].reshape(self.output_dim[1], self.output_dim[0]).T, \
                             zeros((self.output_dim[1], 1))
         return params
 

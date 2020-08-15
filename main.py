@@ -46,11 +46,30 @@ def train_network(data_name, batch_size, epochs, lr, momentum, L, width, patient
     print(f'val_acc {val_acc}')
 
 
-batch_size = 60
+# 92
+# batch_size = 60
+# epochs = 50
+# lr = 0.01
+# momentum = 0.1 \ 0.01 #
+# L = 3
+# width = 20
+# patient = 10
+# ______________-
+# 94
+# batch_size = 60
+# epochs = 50
+# lr = 0.01
+# momentum = 0.1
+# L = 3
+# width = 20
+# patient = 10
+
+batch_size = 64
 epochs = 20
 lr = 0.01
-momentum = 0.01
-L = 5
+momentum = 0
+L = 4
 width = 20
 patient = 10
-train_network('PeaksData', batch_size, epochs, lr, momentum, L, width, patient)#Swiss
+
+train_network('PeaksData', batch_size, epochs, lr, momentum, L, width, patient)  # Swiss|PeaksData|GMMData

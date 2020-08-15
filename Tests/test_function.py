@@ -18,9 +18,9 @@ class test_function(unittest.TestCase):
     def test02_ReLU_F(self):
         x = identity(5)
         W = randn(5, 5)
-        b = randn(5,1)
+        b = randn(5, 1)
 
-        self.assertEqual(ReLU_F(x, W,b).shape, x.shape)
+        self.assertEqual(ReLU_F(x, W, b, with_relu=True).shape, x.shape)
 
     def test03_ReLU_grad(self):
         x = identity(5)

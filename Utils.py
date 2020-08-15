@@ -72,4 +72,4 @@ def show_and_save_plot(x_train, y_train, x_val, y_val, title, semilog=True):
         plt.plot(x_val, y_val, 'b', label='Validation')
         # ax.yaxis.set_minor_formatter(ticker.ScalarFormatter())
         ax.legend()
-        plt.savefig(f'./plots/{title}.pdf')
+        plt.savefig(f'../plots/{title}.pdf')

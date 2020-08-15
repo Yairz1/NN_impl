@@ -52,25 +52,28 @@ class SGD:
                 current_W = W_history[:, i].reshape(m, n)
 
                 g = grad_F(X[:, batch], current_W, C[:, batch])
-                lr = self.armijo_search(X[:, batch], F, current_W, C[:, batch], g, -g, maxIter=30, isNeural=isNeural)
+                # lr = self.armijo_search(X[:, batch], F, current_W, C[:, batch], g, -g, maxIter=30, isNeural=isNeural)
 
             else:
-                output = F(X[:, batch])
-                g = grad_F(
+                output = F(X[:, batch])  # forward pass
+                g = F.backward(
                     objective_soft_max_gradient_X(X=None, W=F.params[F.num_layers - 1][0], C=C[:, batch], WT_X=output),
                     objective_soft_max_gradient_W(X=F.layers_inputs[F.num_layers - 1], W=None, C=C[:, batch],
                                                   WT_X=output))
                 W = F.params_to_vector(F.params).copy()
+
                 lr = self.armijo_search(x=X[:, batch], f=F, W=W, C=C[:, batch], grad_f=g, d=-g, maxIter=100,
-                                        isNeural=isNeural)
+                                        isNeural=isNeural, momentum=(momentum,dw))
             dw = momentum * dw + lr * g.reshape(-1)
             W_history[:, i + 1] = W_history[:, i] - dw
-        return average(W_history, axis=1).reshape(m, n)
+        return W_history[:, i + 1].reshape(m, n)  # average(W_history, axis=1).reshape(m, n)
 
-    def armijo_search(self, x, f, W, C, grad_f, d, maxIter, isNeural):
+    def armijo_search(self, x, f, W, C, grad_f, d, maxIter, isNeural, momentum=0):
         alpha = 0.1
         betta = 0.5
         c = 1 / 10000
+        if momentum != 0:
+            (momentum, dw) = momentum
         if isNeural:
             objective1 = objective_soft_max(x, W=None, C=C, WT_X=f(x))
         for _ in range(maxIter):
@@ -78,6 +81,8 @@ class SGD:
             if not isNeural:
                 isGood_alpha = f(x, W + alpha * d, C) <= f(x, W, C) + c * alpha * trace(grad_f.T @ d)
             else:
+                if momentum != 0:
+                    d = -(momentum * dw + alpha * d.reshape(-1)).reshape(-1, 1)
                 f.set_params(W + alpha * d)
                 objective2 = objective_soft_max(x, W=None, C=C, WT_X=f(x))
                 isGood_alpha = objective2 <= objective1 + c * alpha * trace(grad_f.T @ d)
