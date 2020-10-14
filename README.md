@@ -1,4 +1,4 @@
-# NN framework project
+## Deep Learning From Scratch
 This project includes implementation of a simple neural network for classification tasks and backpropagation mechanism.<br />
 The main building blocks are the following modules:<br />
 • Tests folder - includes gradient based tests for backpropagation mechanism<br />
