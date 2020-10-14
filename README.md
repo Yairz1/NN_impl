@@ -1,6 +1,6 @@
 # NN_impl
 This project includes implementation of a simple neural network for classification tasks and backpropagation mechanism.<br />
-The main building blocksare the following modules:<br />
+The main building blocks are the following modules:<br />
 • Tests folder - includes gradient based tests for backpropagation mechanism<br />
 • Neural Network.py - standard neural network.<br />
 • function.py - includes all activation functions and its gradients.<br />
