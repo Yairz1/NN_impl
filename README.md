@@ -10,6 +10,6 @@ The main building blocks are the following modules:<br />
 • Utils.py - util functions.<br />
 • main.py - full network experiments implementation.<br />
 
-### Visualization of training process with the framework
+### Visualization of training process with our framework
 <img width="523" alt="צילום מסך 2020-10-14 122203" src="https://user-images.githubusercontent.com/17856801/95970066-2eac9b80-0e18-11eb-86ce-bcbcaaf9577e.png">
 
